@@ -237,7 +237,8 @@ bool Box::isBlockLevelBox() const
         || display == DisplayType::Table
         || display == DisplayType::Flex
         || display == DisplayType::Grid
-        || display == DisplayType::FlowRoot;
+        || display == DisplayType::FlowRoot
+        || display == DisplayType::BlockMath;
 }
 
 bool Box::isBlockBox() const
@@ -257,6 +258,7 @@ bool Box::isInlineLevelBox() const
         || display == DisplayType::Ruby
         || display == DisplayType::RubyBase
         || display == DisplayType::RubyAnnotation
+        || display == DisplayType::Math
         || isInlineBlockBox()
         || isInlineTableBox();
 }
@@ -266,7 +268,7 @@ bool Box::isInlineBox() const
     // An inline box is one that is both inline-level and whose contents participate in its containing inline formatting context.
     // A non-replaced element with a 'display' value of 'inline' generates an inline box.
     auto display = m_style.display();
-    return (display == DisplayType::Inline || display == DisplayType::Ruby || display == DisplayType::RubyBase) && !isReplacedBox();
+    return (display == DisplayType::Inline || display == DisplayType::Ruby || display == DisplayType::RubyBase || display == DisplayType::Math) && !isReplacedBox();
 }
 
 bool Box::isAtomicInlineBox() const
@@ -289,6 +291,7 @@ bool Box::isBlockContainer() const
         || display == DisplayType::FlowRoot
         || display == DisplayType::ListItem
         || display == DisplayType::RubyBlock
+        || display == DisplayType::BlockMath
         || isInlineBlockBox()
         || isTableCell()
         || isTableCaption(); // TODO && !replaced element

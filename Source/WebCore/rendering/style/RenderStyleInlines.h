@@ -1057,7 +1057,8 @@ constexpr bool RenderStyle::isDisplayBlockType(DisplayType display)
         || display == DisplayType::Grid
         || display == DisplayType::ListItem
         || display == DisplayType::Table
-        || display == DisplayType::RubyBlock;
+        || display == DisplayType::RubyBlock
+        || display == DisplayType::BlockMath;
 }
 
 constexpr bool RenderStyle::isDisplayInlineType(DisplayType display)
@@ -1070,7 +1071,8 @@ constexpr bool RenderStyle::isDisplayInlineType(DisplayType display)
         || display == DisplayType::InlineTable
         || display == DisplayType::Ruby
         || display == DisplayType::RubyBase
-        || display == DisplayType::RubyAnnotation;
+        || display == DisplayType::RubyAnnotation
+        || display == DisplayType::Math;
 }
 
 constexpr bool RenderStyle::isDisplayRegionType() const
@@ -1079,7 +1081,8 @@ constexpr bool RenderStyle::isDisplayRegionType() const
         || display() == DisplayType::InlineBlock
         || display() == DisplayType::TableCell
         || display() == DisplayType::TableCaption
-        || display() == DisplayType::ListItem;
+        || display() == DisplayType::ListItem
+        || display() == DisplayType::BlockMath;
 }
 
 constexpr bool RenderStyle::isDisplayTableOrTablePart(DisplayType display)
@@ -1123,7 +1126,8 @@ constexpr bool RenderStyle::doesDisplayGenerateBlockContainer() const
         || display == DisplayType::FlowRoot
         || display == DisplayType::ListItem
         || display == DisplayType::TableCell
-        || display == DisplayType::TableCaption);
+        || display == DisplayType::TableCaption
+        || display == DisplayType::BlockMath);
 }
 
 inline double RenderStyle::logicalAspectRatio() const

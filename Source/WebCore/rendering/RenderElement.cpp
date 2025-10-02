@@ -211,17 +211,20 @@ RenderPtr<RenderElement> RenderElement::createFor(Element& element, RenderStyle&
         }
     }
 
+    // TODO: Can we call the MathML renderer directly?
     switch (style.display()) {
     case DisplayType::None:
     case DisplayType::Contents:
         return nullptr;
     case DisplayType::Inline:
+    case DisplayType::Math:
         if (rendererTypeOverride.contains(ConstructBlockLevelRendererFor::Inline))
             return createRenderer<RenderBlockFlow>(RenderObject::Type::BlockFlow, element, WTFMove(style));
         return createRenderer<RenderInline>(RenderObject::Type::Inline, element, WTFMove(style));
     case DisplayType::Block:
     case DisplayType::FlowRoot:
     case DisplayType::InlineBlock:
+    case DisplayType::BlockMath:
         return createRenderer<RenderBlockFlow>(RenderObject::Type::BlockFlow, element, WTFMove(style));
     case DisplayType::ListItem:
         if (rendererTypeOverride.contains(ConstructBlockLevelRendererFor::ListItem))

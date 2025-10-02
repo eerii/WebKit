@@ -40,7 +40,7 @@ namespace CSSPropertyParserHelpers {
 // Keep in sync with the single keyword value fast path of CSSParserFastPaths's parseDisplay.
 RefPtr<CSSValue> consumeDisplay(CSSParserTokenRange& range, CSS::PropertyParserState& state)
 {
-    // <'display'>        = [ <display-outside> || <display-inside> ] | <display-listitem> | <display-internal> | <display-box> | <display-legacy>
+    // <'display'>        = [ <display-outside> || [ <display-inside> | math ] ] | <display-listitem> | <display-internal> | <display-box> | <display-legacy>
     // <display-outside>  = block | inline | run-in
     // <display-inside>   = flow | flow-root | table | flex | grid | ruby
     // <display-listitem> = <display-outside>? && [ flow | flow-root ]? && list-item
@@ -52,6 +52,7 @@ RefPtr<CSSValue> consumeDisplay(CSSParserTokenRange& range, CSS::PropertyParserS
     // <display-box>      = contents | none
     // <display-legacy>   = inline-block | inline-table | inline-flex | inline-grid
     // https://drafts.csswg.org/css-display/#propdef-display
+    // https://w3c.github.io/mathml-core/#new-display-math-value
 
     // Parse single keyword values
     auto singleKeyword = consumeIdent<
@@ -104,7 +105,7 @@ RefPtr<CSSValue> consumeDisplay(CSSParserTokenRange& range, CSS::PropertyParserS
             nextValueID == CSSValueWebkitInlineFlex ? CSSValueInlineFlex : CSSValueFlex);
     }
 
-    // Parse [ <display-outside> || <display-inside> ]
+    // Parse [ <display-outside> || [ <display-inside> | math ] ]
     std::optional<CSSValueID> parsedDisplayOutside;
     std::optional<CSSValueID> parsedDisplayInside;
     while (!range.atEnd()) {
@@ -124,6 +125,7 @@ RefPtr<CSSValue> consumeDisplay(CSSParserTokenRange& range, CSS::PropertyParserS
         case CSSValueGrid:
         case CSSValueTable:
         case CSSValueRuby:
+        case CSSValueMath:
             if (parsedDisplayInside)
                 return nullptr;
             parsedDisplayInside = nextValueID;
@@ -141,6 +143,9 @@ RefPtr<CSSValue> consumeDisplay(CSSParserTokenRange& range, CSS::PropertyParserS
         if (!parsedDisplayOutside || *parsedDisplayOutside == CSSValueInline) {
             if (displayInside == CSSValueRuby)
                 return CSSValueRuby;
+            if (displayInside == CSSValueMath) {
+                return CSSValueMath;
+            }
         }
 
         if (!parsedDisplayOutside || *parsedDisplayOutside == CSSValueBlock) {
@@ -149,6 +154,9 @@ RefPtr<CSSValue> consumeDisplay(CSSParserTokenRange& range, CSS::PropertyParserS
                 return CSSValueBlock;
             if (displayInside == CSSValueRuby)
                 return CSSValueBlockRuby;
+            if (displayInside == CSSValueMath) {
+                return CSSValueBlockMath;
+            }
             return displayInside;
         }
 

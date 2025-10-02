@@ -870,6 +870,8 @@ enum class DisplayType : uint8_t {
     RubyBlock,
     RubyBase,
     RubyAnnotation,
+    Math,
+    BlockMath,
     None
 };
 

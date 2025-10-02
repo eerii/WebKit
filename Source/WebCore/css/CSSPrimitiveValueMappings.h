@@ -769,6 +769,10 @@ constexpr CSSValueID toCSSValueID(DisplayType e)
         return CSSValueRubyBase;
     case DisplayType::RubyAnnotation:
         return CSSValueRubyText;
+    case DisplayType::Math:
+        return CSSValueMath;
+    case DisplayType::BlockMath:
+        return CSSValueBlockMath;
     }
     ASSERT_NOT_REACHED_UNDER_CONSTEXPR_CONTEXT();
     return CSSValueInvalid;
@@ -831,6 +835,10 @@ template<> constexpr DisplayType fromCSSValueID(CSSValueID valueID)
         return DisplayType::RubyBase;
     case CSSValueRubyText:
         return DisplayType::RubyAnnotation;
+    case CSSValueMath:
+        return DisplayType::Math;
+    case CSSValueBlockMath:
+        return DisplayType::BlockMath;
     default:
         break;
     }

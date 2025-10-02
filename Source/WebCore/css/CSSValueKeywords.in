@@ -539,6 +539,8 @@ flow
 block-ruby
 ruby-base
 ruby-text
+// math
+block-math
 // none
 //
 // CSS_PROP_CURSOR:

@@ -488,6 +488,8 @@ TextStream& operator<<(TextStream& ts, DisplayType display)
     case DisplayType::RubyBlock: ts << "block ruby"_s; break;
     case DisplayType::RubyBase: ts << "ruby-base"_s; break;
     case DisplayType::RubyAnnotation: ts << "ruby-text"_s; break;
+    case DisplayType::Math: ts << "math"_s; break;
+    case DisplayType::BlockMath: ts << "block math"_s; break;
     case DisplayType::None: ts << "none"_s; break;
     }
     return ts;

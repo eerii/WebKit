@@ -53,6 +53,7 @@
 #include "LocalDOMWindow.h"
 #include "LocalFrameView.h"
 #include "MathMLElement.h"
+#include "MathMLNames.h"
 #include "NodeName.h"
 #include "Page.h"
 #include "PathOperation.h"
@@ -95,6 +96,7 @@ namespace Style {
 
 using namespace CSS::Literals;
 using namespace HTMLNames;
+using namespace MathMLNames;
 
 Adjuster::Adjuster(const Document& document, const RenderStyle& parentStyle, const RenderStyle* parentBoxStyle, Element* element)
     : m_document(document)
@@ -140,7 +142,9 @@ static DisplayType equivalentBlockDisplay(const RenderStyle& style)
     case DisplayType::FlowRoot:
     case DisplayType::ListItem:
     case DisplayType::RubyBlock:
+    case DisplayType::BlockMath:
         return display;
+
     case DisplayType::InlineTable:
         return DisplayType::Table;
     case DisplayType::InlineBox:
@@ -151,6 +155,8 @@ static DisplayType equivalentBlockDisplay(const RenderStyle& style)
         return DisplayType::Grid;
     case DisplayType::Ruby:
         return DisplayType::RubyBlock;
+    case DisplayType::Math:
+        return DisplayType::BlockMath;
 
     case DisplayType::Inline:
     case DisplayType::InlineBlock:
@@ -193,6 +199,8 @@ static DisplayType equivalentInlineDisplay(const RenderStyle& style)
         return DisplayType::InlineGrid;
     case DisplayType::RubyBlock:
         return DisplayType::Ruby;
+    case DisplayType::BlockMath:
+        return DisplayType::Math;
 
     case DisplayType::Inline:
     case DisplayType::InlineBlock:
@@ -203,6 +211,7 @@ static DisplayType equivalentInlineDisplay(const RenderStyle& style)
     case DisplayType::Ruby:
     case DisplayType::RubyBase:
     case DisplayType::RubyAnnotation:
+    case DisplayType::Math:
         return display;
 
     case DisplayType::FlowRoot:
@@ -525,6 +534,18 @@ void Adjuster::adjust(RenderStyle& style) const
         // Absolute/fixed positioned elements, floating elements and the document element need block-like outside display.
         if (style.hasOutOfFlowPosition() || style.isFloating() || (m_element && m_document->documentElement() == m_element.get()))
             style.setEffectiveDisplay(equivalentBlockDisplay(style));
+
+        // Transformations for display: math.
+        if (style.display() == DisplayType::Math || style.display() == DisplayType::BlockMath) {
+            if (!m_element || !m_element->isMathMLElement())
+                style.setEffectiveDisplay(style.display() == DisplayType::BlockMath ? DisplayType::Block : DisplayType::Inline);
+            else if (m_element->hasTagName(mtableTag))
+                style.setEffectiveDisplay(style.display() == DisplayType::BlockMath ? DisplayType::Table : DisplayType::InlineTable);
+            else if (m_element->hasTagName(mtrTag))
+                style.setEffectiveDisplay(DisplayType::TableRow);
+            else if (m_element->hasTagName(mtdTag))
+                style.setEffectiveDisplay(DisplayType::TableCell);
+        }
 
         adjustFirstLetterStyle(style);
 

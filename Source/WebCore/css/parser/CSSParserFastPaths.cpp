@@ -985,6 +985,7 @@ static RefPtr<CSSValue> parseDisplay(StringView string)
     case CSSValueFlowRoot:
     case CSSValueGrid:
     case CSSValueTable:
+    case CSSValueMath:
     // <display-internal>
     case CSSValueTableCaption:
     case CSSValueTableCell:

@@ -253,7 +253,8 @@ inline bool supportsFirstLineAndLetterPseudoElement(const RenderStyle& style)
         || display == DisplayType::InlineBlock
         || display == DisplayType::TableCell
         || display == DisplayType::TableCaption
-        || display == DisplayType::FlowRoot;
+        || display == DisplayType::FlowRoot
+        || display == DisplayType::BlockMath;
 }
 
 class PostResolutionCallbackDisabler {

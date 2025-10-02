@@ -3742,7 +3742,8 @@ static bool displayTypeNeedsSpace(DisplayType type)
         || type == DisplayType::InlineFlex
         || type == DisplayType::InlineGrid
         || type == DisplayType::InlineTable
-        || type == DisplayType::TableCell;
+        || type == DisplayType::TableCell
+        || type == DisplayType::BlockMath;
 }
 
 static bool needsSpaceFromDisplay(AccessibilityObject& axObject)
